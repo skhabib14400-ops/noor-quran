@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Noor Islam</string>
+    <string name="home">Home</string>
+    <string name="quran">Quran</string>
+    <string name="prayer_times">Prayer Times</string>
+    <string name="search">Search</string>
+    <string name="settings">Settings</string>
+
+    <!-- ================================================================= -->
+    <!-- Google AdMob Configuration Placeholders                           -->
+    <!-- Replace these official Google TEST IDs with your real AdMob IDs    -->
+    <!-- ================================================================= -->
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="admob_banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="admob_interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+</resources>

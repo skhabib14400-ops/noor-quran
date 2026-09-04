@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">নূর ইসলাম</string>
+    <string name="home">হোম</string>
+    <string name="quran">কুরআন</string>
+    <string name="prayer_times">নামাজের সময়সূচি</string>
+    <string name="search">অনুসন্ধান</string>
+    <string name="settings">সেটিংস</string>
+</resources>

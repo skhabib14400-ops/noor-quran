@@ -1,0 +1,6 @@
+{
+  "name": "Noor Islam",
+  "description": "Comprehensive authentic Islamic application featuring verified Holy Quran, precision prayer times, dynamic Sahri/Iftar countdown, digital Tasbih, Qibla compass, 99 Names of Allah, and Duas.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
