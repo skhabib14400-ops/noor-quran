@@ -99,7 +99,12 @@ fun HomeScreen(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // 1. Top Section: Location Selector Pill
+        // 1. Calm, language-aware welcome header
+        item {
+            HomeWelcomeHeader(lang = lang, hijriDate = hijriDate)
+        }
+
+        // 2. Top Section: Location Selector Pill
         item {
             LocationPillSelector(
                 schedule = prayerSchedule,
@@ -108,7 +113,7 @@ fun HomeScreen(
             )
         }
 
-        // 2. Islamic Hero & Prayer Times Banner
+        // 3. Islamic Hero & Prayer Times Banner
         item {
             HeroPrayerCard(
                 schedule = prayerSchedule,
@@ -118,7 +123,7 @@ fun HomeScreen(
             )
         }
 
-        // 3. Sehri & Iftar Quick Status Strip
+        // 4. Sehri & Iftar Quick Status Strip
         item {
             SehriIftarStrip(
                 schedule = prayerSchedule,
@@ -126,7 +131,7 @@ fun HomeScreen(
             )
         }
 
-        // 4. Mini Horizontal Prayer Schedule Row
+        // 5. Mini Horizontal Prayer Schedule Row
         item {
             PrayerMiniScheduleRow(
                 schedule = prayerSchedule,
@@ -134,7 +139,7 @@ fun HomeScreen(
             )
         }
 
-        // 5. Islamic Features Hub (Tasbih, Qibla, 99 Names, Dua)
+        // 6. Islamic Features Hub (Tasbih, Qibla, 99 Names, Dua)
         item {
             Text(
                 text = if (lang == AppLanguage.BENGALI) "ইসলামিক ফিচারসমূহ" else if (lang == AppLanguage.ARABIC) "الخدمات الإسلامية" else "Islamic Utilities",
@@ -148,7 +153,7 @@ fun HomeScreen(
             )
         }
 
-        // 6. Continue Reading / Last Read Card
+        // 7. Continue Reading / Last Read Card
         item {
             ContinueReadingCard(
                 surahName = lastReadSurah?.nameEnglish ?: "Al-Faatiha",
@@ -165,7 +170,7 @@ fun HomeScreen(
             )
         }
 
-        // 7. Quick Access Hub (Surahs, Juz, Bookmarks, Prayer Times)
+        // 8. Quick Access Hub (Surahs, Juz, Bookmarks, Prayer Times)
         item {
             Text(
                 text = AppStrings.get("quick_access", lang),
@@ -179,7 +184,7 @@ fun HomeScreen(
             )
         }
 
-        // 8. Featured Daily Ayah (Ayatul Kursi - Al-Baqarah 2:255)
+        // 9. Featured Daily Ayah (Ayatul Kursi - Al-Baqarah 2:255)
         item {
             DailyVerseCard(
                 lang = lang,
@@ -187,7 +192,7 @@ fun HomeScreen(
             )
         }
 
-        // 9. Non-intrusive Banner Ad (Support / Sponsor section)
+        // 10. Non-intrusive Banner Ad (Support / Sponsor section)
         item {
             com.example.ads.AdMobBanner(
                 modifier = Modifier.padding(vertical = 8.dp)
@@ -198,6 +203,50 @@ fun HomeScreen(
         item {
             Spacer(modifier = Modifier.height(16.dp))
         }
+    }
+}
+
+@Composable
+private fun HomeWelcomeHeader(
+    lang: AppLanguage,
+    hijriDate: HijriDate,
+    modifier: Modifier = Modifier
+) {
+    val greeting = when (lang) {
+        AppLanguage.BENGALI -> "আসসালামু আলাইকুম"
+        AppLanguage.ARABIC -> "السلام عليكم"
+        AppLanguage.ENGLISH -> "Assalamu Alaikum"
+    }
+    val subtitle = when (lang) {
+        AppLanguage.BENGALI -> "আপনার প্রতিদিনের কুরআন ও ইবাদতের সঙ্গী"
+        AppLanguage.ARABIC -> "رفيقك اليومي للقرآن والعبادة"
+        AppLanguage.ENGLISH -> "Your daily companion for Quran and worship"
+    }
+    val date = when (lang) {
+        AppLanguage.BENGALI -> hijriDate.formatBn()
+        AppLanguage.ARABIC -> hijriDate.formatAr()
+        AppLanguage.ENGLISH -> hijriDate.formatEn()
+    }
+    Column(
+        modifier = modifier.fillMaxWidth().padding(top = 2.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Text(
+            text = greeting,
+            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        Text(
+            text = subtitle,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            text = date,
+            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(top = 4.dp)
+        )
     }
 }
 
@@ -512,38 +561,47 @@ private fun IslamicFeaturesHub(
     lang: AppLanguage,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    LazyRow(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        contentPadding = PaddingValues(end = 4.dp)
     ) {
-        QuickHubItem(
-            title = AppStrings.get("tasbih", lang),
-            icon = Icons.Default.TouchApp,
-            color = Color(0xFF2E7D32),
-            modifier = Modifier.weight(1f),
-            onClick = { onNavigate(Screen.Tasbih) }
-        )
-        QuickHubItem(
-            title = AppStrings.get("qibla", lang),
-            icon = Icons.Default.Explore,
-            color = Color(0xFF0277BD),
-            modifier = Modifier.weight(1f),
-            onClick = { onNavigate(Screen.Qibla) }
-        )
-        QuickHubItem(
-            title = AppStrings.get("names_of_allah", lang),
-            icon = Icons.Default.AutoAwesome,
-            color = QuranGold,
-            modifier = Modifier.weight(1f),
-            onClick = { onNavigate(Screen.NamesOfAllah) }
-        )
-        QuickHubItem(
-            title = AppStrings.get("dua", lang),
-            icon = Icons.Default.Favorite,
-            color = Color(0xFF6A1B9A),
-            modifier = Modifier.weight(1f),
-            onClick = { onNavigate(Screen.Dua) }
-        )
+        item {
+            QuickHubItem(
+                title = AppStrings.get("tasbih", lang),
+                icon = Icons.Default.TouchApp,
+                color = Color(0xFF2E7D32),
+                modifier = Modifier.width(96.dp),
+                onClick = { onNavigate(Screen.Tasbih) }
+            )
+        }
+        item {
+            QuickHubItem(
+                title = AppStrings.get("qibla", lang),
+                icon = Icons.Default.Explore,
+                color = Color(0xFF0277BD),
+                modifier = Modifier.width(96.dp),
+                onClick = { onNavigate(Screen.Qibla) }
+            )
+        }
+        item {
+            QuickHubItem(
+                title = AppStrings.get("names_of_allah", lang),
+                icon = Icons.Default.AutoAwesome,
+                color = QuranGold,
+                modifier = Modifier.width(96.dp),
+                onClick = { onNavigate(Screen.NamesOfAllah) }
+            )
+        }
+        item {
+            QuickHubItem(
+                title = AppStrings.get("dua", lang),
+                icon = Icons.Default.Favorite,
+                color = Color(0xFF6A1B9A),
+                modifier = Modifier.width(96.dp),
+                onClick = { onNavigate(Screen.Dua) }
+            )
+        }
     }
 }
 
