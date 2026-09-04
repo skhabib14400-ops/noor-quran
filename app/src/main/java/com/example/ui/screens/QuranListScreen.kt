@@ -31,7 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -94,9 +94,10 @@ fun QuranListScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        // Tab Row
-        TabRow(
+        // Scrollable tabs keep Bangla labels readable on narrow phones
+        ScrollableTabRow(
             selectedTabIndex = selectedTabIndex,
+            edgePadding = 16.dp,
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.primary
         ) {
@@ -137,7 +138,20 @@ fun QuranListScreen(
 
         when (selectedTabIndex) {
             0 -> {
-                // Surah Filter Box
+                // Surah overview and filter
+                Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+                    Text(
+                        text = if (lang == AppLanguage.BENGALI) "কুরআন মাজীদ" else if (lang == AppLanguage.ARABIC) "القرآن الكريم" else "The Noble Quran",
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Text(
+                        text = if (lang == AppLanguage.BENGALI) "১১৪টি সূরা • ৬২৩৬টি আয়াত" else if (lang == AppLanguage.ARABIC) "١١٤ سورة • ٦٢٣٦ آية" else "114 Surahs • 6,236 Ayahs",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(top = 3.dp)
+                    )
+                }
                 OutlinedTextField(
                     value = filterQuery,
                     onValueChange = { filterQuery = it },
@@ -298,20 +312,25 @@ private fun SurahListItem(
                 )
 
                 Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    val displayName = if (lang == AppLanguage.BENGALI && surah.nameBengali.isNotBlank()) {
-                        "${surah.nameBengali} • ${surah.bengaliMeaning}"
+                    val primaryName = if (lang == AppLanguage.BENGALI && surah.nameBengali.isNotBlank()) {
+                        surah.nameBengali
                     } else {
-                        "${surah.nameEnglish} • ${surah.englishMeaning}"
+                        surah.nameEnglish
+                    }
+                    val secondaryName = when (lang) {
+                        AppLanguage.BENGALI -> "${surah.nameEnglish} • ${surah.bengaliMeaning}"
+                        AppLanguage.ARABIC -> surah.nameArabic
+                        AppLanguage.ENGLISH -> surah.englishMeaning
                     }
 
                     Text(
-                        text = surah.nameEnglish,
+                        text = primaryName,
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
-                        text = displayName,
+                        text = secondaryName,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
